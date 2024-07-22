@@ -1,5 +1,7 @@
+
+
 import { Inter } from "next/font/google";
-import {NextUIProvider} from "@nextui-org/react"
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, NextUIProvider, useDisclosure } from "@nextui-org/react"
 import "./globals.css";
 import Header from "./components/Header";
 
@@ -9,7 +11,7 @@ export const metadata = {
   title: "Pix Dama",
   description: "",
   icons: {
-    icon: '/favicon.png', 
+    icon: '/favicon.png',
   }
 };
 
