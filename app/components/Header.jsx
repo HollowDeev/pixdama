@@ -20,16 +20,18 @@ function Header() {
 
   // Gerenciadores do Modal
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
-  const [tipoModal, definirTipoModal] = useState('cadastro')
+  const [tipoModal, definirTipoModal] = useState()
 
   const abrirModal = (tipo) => {
+    console.log(tipo)
+    
     definirTipoModal(tipo)
+    console.log(tipoModal)
     onOpen()
   }
 
   const [usuarioAutenticado, definirUsuarioAutenticado] = useState(false)
 
-  
 
   useEffect(() => {
 
@@ -104,7 +106,7 @@ function Header() {
         </Dropdown> */}
 
       </div>
-      <ModalLogin isOpen={isOpen} onOpenChange={onOpenChange} tipoModal={tipoModal} />
+      <ModalLogin isOpen={isOpen} onOpenChange={onOpenChange} tipoModal={tipoModal}/>
     </>
   )
 }

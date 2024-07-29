@@ -2,7 +2,7 @@
 
 import { createClient } from "@/utils/supabase/client"
 
-export async function login(email, senha) {
+export async function entrar(email, senha) {
     const supabase = createClient()
     
     let sucessoLogin = false
@@ -24,8 +24,6 @@ export async function login(email, senha) {
       }
     } else {
       sucessoLogin = true 
-
-      const { data: {session }} = await supabase.auth.getSession()
 
       resposta = {
         sucessoLogin,
