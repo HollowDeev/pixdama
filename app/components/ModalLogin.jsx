@@ -108,7 +108,6 @@ function ModalLogin({ tipoModal, isOpen, onOpenChange }) {
                 fechar()
                 if (sucessoCadastro) {
                 } else {
-                    router.push(`error/${mensagem}`)
                     alert(mensagem)
                 }
             } else {

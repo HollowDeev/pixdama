@@ -14,10 +14,11 @@ export async function cadastro(nome, email, senha, CPF, dataFormatada, confirmaO
   }
 
 
+
+
   const { error } = await supabase.auth.signUp(data)
 
   if (error) {
-    console.log('1')
     sucessoCadastro = false
     resposta = {
       sucessoCadastro,
@@ -25,13 +26,26 @@ export async function cadastro(nome, email, senha, CPF, dataFormatada, confirmaO
     }
   } else {
 
-    const { data: user } = await supabase.auth.getUser()
-    const userId = user.user.id;
-
+    
     const apenasNumero = CPF.replace(/\D/g, '');
     const CPF_Formatado = parseInt(apenasNumero, 10);
 
-    const { error} = await supabase
+    let { data, error } = await supabase
+      .from('dados_usuarios')
+      .select("*")
+      .eq('CPF', CPF_Formatado)
+      
+    if(data){
+      sucessoCadastro = false
+      resposta = {
+        sucessoCadastro,
+        mensagem: 'CPF já cadastrado'
+      }
+    }else {
+      const { data: user } = await supabase.auth.getUser()
+    const userId = user.user.id;
+
+    const { error } = await supabase
       .from('dados_usuarios')
       .insert([{ id_usuario: userId, nome: nome, data_nascimento: dataFormatada, CPF: CPF_Formatado, aceitou_termos: confirmaOsTermos, confirmou_idade: confirmaSerMaiorDeIdade, confirmou_dados: confirmaPreencherCorretamente }])
 
@@ -48,9 +62,7 @@ export async function cadastro(nome, email, senha, CPF, dataFormatada, confirmaO
         mensagem: 'Usuario Cadastrado com sucesso'
       }
     }
-
-
-
+    }
   }
 
   return resposta
