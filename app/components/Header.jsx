@@ -70,7 +70,7 @@ function Header() {
 
   return (
     <>
-      <div className='bg-gray-700 w-full h-16 flex items-center px-10 justify-between'>
+      <div className='bg-gray-700 w-full h-16 flex items-center px-4 justify-between'>
         <Link href="/" className='cursor-pointer'>
           <p className='text-xl text-white '>PIX <span className='font-black text-gray-300'>Dama</span> </p>
         </Link>
