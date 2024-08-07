@@ -129,7 +129,7 @@ function ModalLogin({ tipoModal, isOpen, onOpenChange }) {
     }
 
     return (
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange} className="dark" backdrop="blur">
+        <Modal isDismissable={false} isOpen={isOpen} onOpenChange={onOpenChange} className="dark" backdrop="blur">
             {
                 tipoModal == "cadastro"  ?
                     <ModalContent>
