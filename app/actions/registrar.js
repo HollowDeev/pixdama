@@ -21,7 +21,9 @@ export async function cadastro(nome, email, senha, CPF, dataFormatada, confirmaO
     .select("*")
     .eq('CPF', CPF_Formatado)
 
-  if (dadosCPF) {
+   
+
+  if (dadosCPF.length != 0) {
     sucessoCadastro = false
     resposta = {
       sucessoCadastro,
