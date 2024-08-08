@@ -124,7 +124,7 @@ function Header() {
               </Dropdown>
           }
         </div>
-      </div >
+      </div>
       <ModalLogin isOpen={isOpen} onOpenChange={onOpenChange} tipoModal={tipoModal} />
     </>
   )
