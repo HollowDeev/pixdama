@@ -42,6 +42,11 @@ function ModalLogin({ tipoModal, isOpen, onOpenChange }) {
     const [erroCamposVazios, definirErroCamposVazios] = useState(false)
     const [erroMaiorDeIdade, definirErroMaiorDeIdade] = useState(false)
 
+    const [erroLogin, definirErroLogin] = useState({
+        erro: false,
+        mensagemErro: ''
+    })
+
     // Gerencia Progresso de cadastro
     const [etapaCadastro, definirEtapaCadastro] = useState(1)
 
@@ -119,11 +124,14 @@ function ModalLogin({ tipoModal, isOpen, onOpenChange }) {
 
     const logar = async (fechar) => {
         const { sucessoLogin, mensagem } = await entrar(email, senha)
-        fechar()
-        if (sucessoLogin) {
+        
+        if (!sucessoLogin) {
+            definirErroLogin({
+                erro: true,
+                mensagemErro: mensagem
+            })
         } else {
-            router.push(`error/${mensagem}`)
-            console.log(mensagem)
+            fechar()
         }
 
     }
@@ -272,7 +280,12 @@ function ModalLogin({ tipoModal, isOpen, onOpenChange }) {
                                     />
                                     <p className='text-white text-[12px] cursor-pointer font-bold'>Esqueceu sua Senha?</p>
 
-                                   
+                                    {
+                                        erroLogin.erro &&
+                                        <div className='px-2 py-1 bg-red-700 text-white/60 font-bold text-center text-medium'>
+                                            <p>{erroLogin.mensagemErro}</p>
+                                        </div>
+                                    }
 
                                 </ModalBody>
                                 <ModalFooter>

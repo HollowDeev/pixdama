@@ -18,9 +18,10 @@ export async function entrar(email, senha) {
   
     if (error) {
       sucessoLogin = false 
+      console.log(error)
       resposta = {
         sucessoLogin,
-        mensagem: error
+        mensagem: "Email ou senha Incorretos"
       }
     } else {
       sucessoLogin = true 
