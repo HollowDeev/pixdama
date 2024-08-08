@@ -35,12 +35,15 @@ function ModalLogin({ tipoModal, isOpen, onOpenChange }) {
     const [confirmaOsTermos, definirConfirmacaoTermos] = useState(false)
 
     // Gerencia a validade dos dados
+    const [erroMaiorDeIdade, definirErroMaiorDeIdade] = useState(false)
     const [erroDeSenha, definirErroDeSenha] = useState({
         erro: false,
         mensagemErro: ''
     })
-    const [erroCamposVazios, definirErroCamposVazios] = useState(false)
-    const [erroMaiorDeIdade, definirErroMaiorDeIdade] = useState(false)
+    const [erroRegistro, definirErroRegistro] = useState({
+        erro: false,
+        mensagemErro: ''
+    })
 
     const [erroLogin, definirErroLogin] = useState({
         erro: false,
@@ -91,9 +94,14 @@ function ModalLogin({ tipoModal, isOpen, onOpenChange }) {
 
     const proximaEtapa = () => {
         if (nome == '' || email == '' || senha == '' || confirmarSenha == '' || senha != confirmarSenha) {
-            definirErroCamposVazios(true)
+            definirErroRegistro({
+                erro: true,
+                mensagemErro: 'Preencha corretamente todos os dados'
+            })
         } else {
-            definirErroCamposVazios(false)
+            definirErroRegistro({
+                erro: false
+            })
             definirEtapaCadastro(2)
         }
     }
@@ -105,15 +113,24 @@ function ModalLogin({ tipoModal, isOpen, onOpenChange }) {
         const dataFormatada = `${year}/${month}/${day}`
 
         if (CPF == '' || dataFormatada == "2000-01-01" || !confirmaPreencherCorretamente || !confirmaSerMaiorDeIdade) {
-            definirErroCamposVazios(true)
+            definirErroRegistro({
+                erro: true,
+                mensagemErro: 'Preencha Corretamente todos os dados'
+            })
         } else {
             if (deMaior) {
-                definirErroCamposVazios(false)
+                definirErroRegistro({
+                    erro: false
+                })
                 const { sucessoCadastro, mensagem } = await cadastro(nome, email, senha, CPF, dataFormatada, confirmaOsTermos, confirmaPreencherCorretamente, confirmaSerMaiorDeIdade)
-                fechar()
+                
                 if (sucessoCadastro) {
+                    fechar()
                 } else {
-                    alert(mensagem)
+                    definirErroRegistro({
+                        erro: true,
+                        mensagemErro: mensagem
+                    })
                 }
             } else {
                 definirErroMaiorDeIdade(true)
@@ -220,9 +237,9 @@ function ModalLogin({ tipoModal, isOpen, onOpenChange }) {
                                     )}
 
                                     {
-                                        erroCamposVazios &&
+                                        erroRegistro.erro &&
                                         <div className='px-2 py-1 bg-red-700 text-white/60 font-bold text-center text-medium'>
-                                            <p>Preencha todos os campos corretamente</p>
+                                            <p>{erroRegistro.mensagemErro}</p>
                                         </div>
                                     }
 
@@ -231,7 +248,9 @@ function ModalLogin({ tipoModal, isOpen, onOpenChange }) {
                                     {etapaCadastro == 1 ? (
                                         <>
                                             <Button color="danger" variant="light" onClick={() => {
-                                                definirErroCamposVazios(false)
+                                                definirErroRegistro({
+                                                    erro: false
+                                                })
                                                 onClose()
                                             }}>
                                                 Cancelar
