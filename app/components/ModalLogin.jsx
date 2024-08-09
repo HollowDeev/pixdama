@@ -231,7 +231,7 @@ function ModalLogin({ tipoModal, isOpen, onOpenChange }) {
                                                 <p className='text-sm text-neutral-400'>Confirmo ter preenchido corretamente todos os meus dados</p>
                                             </Checkbox>
                                             <Checkbox color='success' isSelected={confirmaOsTermos} onValueChange={definirConfirmacaoTermos}>
-                                                <p className='text-sm text-neutral-400'>Aceito todos os <Link href='/'>Termos de Uso</Link> da plataforma</p>
+                                                <p className='text-sm text-neutral-400'>Aceito todos os <a href='/termos' className='font-bold' target='_blank'>Termos de Uso</a> da plataforma</p>
                                             </Checkbox>
                                         </>
                                     )}

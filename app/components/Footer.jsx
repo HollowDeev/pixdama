@@ -10,6 +10,8 @@ function Footer() {
                 </Link>
                 |
                 <p>Todos os Direitos reservados</p>
+                |
+                <a href="/termos" target='_blank' className='font-bold'>Termos da Plataforma</a>
             </div>
             <div className='flex gap-4 items-center'>
                 <div className='border py-1 px-2 rounded-full'>
