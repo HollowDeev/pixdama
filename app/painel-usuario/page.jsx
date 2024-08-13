@@ -24,9 +24,19 @@ function painelUsuario() {
                 route.push('/')
             }
         })
-
+       
         const verificarSessao = async () => {
             const { data, error } = await supabase.auth.getUser()
+
+            const formatarNomeUsuario = (nomeCompleto) => {
+                const nomes = nomeCompleto.trim().split(" ");
+
+                let primeiroNome = nomes[0];
+
+                primeiroNome = primeiroNome.charAt(0).toUpperCase() + primeiroNome.slice(1).toLowerCase();
+
+                return primeiroNome;
+            }
 
             if (error || !data) {
                 definirUsuarioAutenticado(false)
@@ -38,11 +48,12 @@ function painelUsuario() {
                     .select("*")
                     .eq('id_usuario', data.user.id)
 
+                console.log(dados_usuarios[0])
                 if (error) {
                     console.log(error)
                 } else (
                     definirDadosUsuarios({
-                        nome: dados_usuarios[0].nome,
+                        nome: formatarNomeUsuario(dados_usuarios[0].nome),
                         totalVitorias: dados_usuarios[0].numero_vitorias,
                         vitoriasEmSequencia: dados_usuarios[0].vitorias_sequencia
                     })
