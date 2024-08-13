@@ -15,26 +15,47 @@ export default function Home() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const [usuarioAutenticado, definirUsuarioAutenticado] = useState(false)
+  const [dadosUsuarios, definirDadosUsuarios] = useState({})
 
   useEffect(() => {
+
+    const verificarSessao = async () => {
+      const { data, error } = await supabase.auth.getUser()
+
+      if (error || !data) {
+        definirUsuarioAutenticado(false)
+      } else {
+        definirUsuarioAutenticado(true)
+        let { data: dados_usuarios, error } = await supabase
+          .from('dados_usuarios')
+          .select("*")
+          .eq('id_usuario', data.user.id)
+
+        if (error) {
+          console.error(error)
+        } else (
+
+          definirDadosUsuarios({
+            nome: dados_usuarios[0].nome,
+            totalVitorias: dados_usuarios[0].numero_vitorias,
+            vitoriasEmSequencia: dados_usuarios[0].vitorias_sequencia
+          })
+        )
+
+
+      }
+    }
 
     supabase.auth.onAuthStateChange((event) => {
       if (event == "SIGNED_IN") {
         definirUsuarioAutenticado(true)
+        verificarSessao()
       } else if (event == "SIGNED_OUT") {
         definirUsuarioAutenticado(false)
       }
     })
 
-    const verificarSessao = async () => {
-      const { data: user, error } = await supabase.auth.getUser()
 
-      if (error || !user) {
-        definirUsuarioAutenticado(false)
-      } else {
-        definirUsuarioAutenticado(true)
-      }
-    }
 
     verificarSessao()
   }, [])
@@ -70,7 +91,7 @@ export default function Home() {
             <p className="text-white font-bold">Total <br /> de <br /> Vitorias</p>
           </div>
           <p className={`text-white font-black text-6xl ${!usuarioAutenticado && "blur-sm"}`}>
-            {usuarioAutenticado ? (0) : 18}
+            {usuarioAutenticado ? dadosUsuarios.totalVitorias : 18}
           </p>
         </div>
 
