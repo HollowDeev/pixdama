@@ -2,7 +2,7 @@
 
 import { Button } from '@nextui-org/button'
 import { useDisclosure } from '@nextui-org/modal'
-import { UserCircle } from '@phosphor-icons/react'
+import { SignOut, UserCircle, Wallet } from '@phosphor-icons/react'
 
 import React, { useEffect, useState } from 'react'
 import ModalLogin from './ModalLogin'
@@ -78,9 +78,24 @@ function Header() {
           {
             usuarioAutenticado ?
               (
-                <Button variant='ghost' className='bg-gray-100 text-black font-bold' onPress={fecharSessao}>
-                  Sair
-                </Button>
+                <Dropdown className='dark'>
+                  <DropdownTrigger>
+                    <UserCircle size={32} weight="fill" className='text-white' />
+                  </DropdownTrigger>
+                  <DropdownMenu>
+                    <DropdownItem onClick={() => router.push("/painel-usuario")} className='text-white' startContent={
+
+                      <Wallet size={25} weight="duotone" />
+                    }>
+                      Perfil | Carteira
+                    </DropdownItem>
+                    <DropdownItem onClick={() => fecharSessao()} color='danger' className='text-white' startContent={
+                      <SignOut size={25} weight="duotone" />
+                    }>
+                      Sair
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
               )
               :
               <nav className='flex gap-5'>
@@ -104,7 +119,9 @@ function Header() {
                   <DropdownItem onClick={() => fecharSessao()} className='text-white'>
                     Sair
                   </DropdownItem>
-
+                  <DropdownItem onClick={() => router.push("/painel-usuario")} className='text-white'>
+                    Perfil | Carteira
+                  </DropdownItem>
                 </DropdownMenu>
               </Dropdown>
               :
