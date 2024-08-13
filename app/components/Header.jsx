@@ -116,11 +116,16 @@ function Header() {
                   <UserCircle size={32} weight="fill" className='text-white' />
                 </DropdownTrigger>
                 <DropdownMenu>
-                  <DropdownItem onClick={() => fecharSessao()} className='text-white'>
-                    Sair
-                  </DropdownItem>
-                  <DropdownItem onClick={() => router.push("/painel-usuario")} className='text-white'>
+                  <DropdownItem onClick={() => router.push("/painel-usuario")} className='text-white' startContent={
+
+                    <Wallet size={25} weight="duotone" />
+                  }>
                     Perfil | Carteira
+                  </DropdownItem>
+                  <DropdownItem onClick={() => fecharSessao()} color='danger' className='text-white' startContent={
+                    <SignOut size={25} weight="duotone" />
+                  }>
+                    Sair
                   </DropdownItem>
                 </DropdownMenu>
               </Dropdown>
