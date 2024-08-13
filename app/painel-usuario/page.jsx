@@ -89,7 +89,7 @@ function painelUsuario() {
                         <div className='flex justify-between'>
                             <div className='flex justify-start '>
                                 <div className='flex flex-col gap3'>
-                                    <div><h1 className='font-bold text-4xl'>Olá, Thauã</h1></div>
+                                    <div><h1 className='font-bold text-4xl'>Olá, {dadosUsuarios.nome}</h1></div>
                                     <div>
                                         <p className='text-stone-500'>Saldo Atual:</p>
                                         <p >R$ 0,00</p>
