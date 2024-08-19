@@ -2,7 +2,7 @@
 
 import { Button } from '@nextui-org/button'
 import { useDisclosure } from '@nextui-org/modal'
-import { SignOut, UserCircle, Wallet } from '@phosphor-icons/react'
+import { ChartPieSlice, PencilSimple, SignOut, UserCircle, Wallet } from '@phosphor-icons/react'
 
 import React, { useEffect, useState } from 'react'
 import ModalLogin from './ModalLogin'
@@ -11,6 +11,7 @@ import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-o
 import Link from 'next/link'
 import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
+import alterarSenha from '../actions/alterarSenha'
 
 function Header() {
 
@@ -23,14 +24,13 @@ function Header() {
   const [tipoModal, definirTipoModal] = useState()
 
   const abrirModal = (tipo) => {
-    console.log(tipo)
 
     definirTipoModal(tipo)
-    console.log(tipoModal)
     onOpen()
   }
 
   const [usuarioAutenticado, definirUsuarioAutenticado] = useState(false)
+  const [dadosUsuarios, definirDadosUsuarios] = useState({})
 
 
   useEffect(() => {
@@ -44,14 +44,37 @@ function Header() {
     })
 
     const verificarSessao = async () => {
-      const { data: user, error } = await supabase.auth.getUser()
+      const { data, error } = await supabase.auth.getUser()
+      let emailUsuario = data.user.email
 
-      if (error || !user) {
+
+      if (error || !data) {
         definirUsuarioAutenticado(false)
       } else {
-        definirUsuarioAutenticado(true)
+        let { data: dados_usuarios, error } = await supabase
+          .from('dados_usuarios')
+          .select("*")
+          .eq('id_usuario', data.user.id)
+
+        if (error) {
+          console.error(error)
+        } else {
+          if (dados_usuarios[0].nivel_usuario != 2) {
+            definirUsuarioAutenticado(false)
+          } else {
+            definirUsuarioAutenticado(true)
+            definirDadosUsuarios({
+              email: emailUsuario,
+              administrador: dados_usuarios[0].nivel_usuario == 2 ? true : false
+            })
+          }
+
+        }
+
+
       }
     }
+
 
     verificarSessao()
   }, [])
@@ -66,6 +89,11 @@ function Header() {
       router.push('/')
     }
 
+  }
+
+  const redefinirSenha = () => {
+    alterarSenha(dadosUsuarios.email)
+    alert('Um link para redefinição da sua senha foi enviado para o seu email!')
   }
 
   return (
@@ -89,6 +117,23 @@ function Header() {
                     }>
                       Perfil | Carteira
                     </DropdownItem>
+
+                    {dadosUsuarios.administrador &&
+                      <DropdownItem onClick={() => router.push("/painel-adm")} className='text-white' startContent={
+
+                        <ChartPieSlice size={25} weight="duotone" />
+                      }>
+                        Dashboard
+                      </DropdownItem>
+                    }
+
+                    <DropdownItem onClick={() => redefinirSenha()} className='text-white' startContent={
+
+                      <PencilSimple size={25} weight="duotone" />
+                    }>
+                      Redefinir Senha
+                    </DropdownItem>
+
                     <DropdownItem onClick={() => fecharSessao()} color='danger' className='text-white' startContent={
                       <SignOut size={25} weight="duotone" />
                     }>
