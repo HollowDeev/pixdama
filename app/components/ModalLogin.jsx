@@ -4,20 +4,17 @@ import { Input } from '@nextui-org/input'
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@nextui-org/modal'
 import { Eye, EyeClosed } from '@phosphor-icons/react'
 import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { entrar } from '../actions/entrar'
 import { cadastro } from '../actions/registrar'
-import { parseAbsoluteToLocal, parseDate } from '@internationalized/date'
+import {  parseDate } from '@internationalized/date'
 import { DatePicker } from '@nextui-org/react'
 import { I18nProvider } from '@react-aria/i18n'
 import { maior18 } from '../actions/maior18'
 import { Checkbox } from '@nextui-org/checkbox'
-import Link from 'next/link'
+
 
 
 function ModalLogin({ tipoModal, isOpen, onOpenChange }) {
-
-    const router = useRouter()
 
     // Gerenciadores da visibilidade da senha
     const [senhaVisivel, definirSenhaVisivel] = useState(false)

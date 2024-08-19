@@ -33,14 +33,11 @@ export default function Home() {
 
         if (error) {
           console.error(error)
-        } else (
-
+        } else if(dados_usuarios){
           definirDadosUsuarios({
-            nome: dados_usuarios[0].nome,
             totalVitorias: dados_usuarios[0].numero_vitorias,
-            vitoriasEmSequencia: dados_usuarios[0].vitorias_sequencia
           })
-        )
+        }
 
 
       }

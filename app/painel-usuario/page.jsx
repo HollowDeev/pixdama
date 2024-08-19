@@ -48,7 +48,6 @@ function painelUsuario() {
                     .select("*")
                     .eq('id_usuario', data.user.id)
 
-                console.log(dados_usuarios[0])
                 if (error) {
                     console.log(error)
                 } else (
@@ -65,6 +64,8 @@ function painelUsuario() {
 
         verificarSessao()
     }, [])
+
+    
     return (
         <main className='flex min-h-screen flex-col items-center px-2 py-9 md:px-16 gap-10 text-white'>
             {usuarioAutenticado && (
