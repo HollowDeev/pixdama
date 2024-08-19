@@ -86,6 +86,11 @@ function painelAdm() {
         verificarSessao()
     }, [])
 
+    const redefinirSenha = () => {
+        alterarSenha(dadosUsuarios.email)
+        alert('Um link para redefinição da sua senha foi enviado para o seu email!')
+      }
+
     return (
         <main className='flex min-h-screen flex-col items-center px-2 py-9 md:px-16 gap-5 text-white'>
             {usuarioAutenticado && (
@@ -97,7 +102,7 @@ function painelAdm() {
                                 <GearSix size={40} weight="duotone" className='cursor-pointer' />
                             </DropdownTrigger>
                             <DropdownMenu>
-                                <DropdownItem onClick={() => alterarSenha(dadosUsuarios.email)} className='text-white' startContent={
+                                <DropdownItem onClick={() => redefinirSenha()} className='text-white' startContent={
                                     <PencilSimple size={25} weight="duotone"/>
                                 }>
                                     Alterar Senha
