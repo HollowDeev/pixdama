@@ -144,13 +144,20 @@ function Header() {
                     Perfil | Carteira
                   </DropdownItem>
                   {dadosUsuarios.administrador &&
-                      <DropdownItem onClick={() => router.push("/painel-adm")} className='text-white' startContent={
+                    <DropdownItem onClick={() => router.push("/painel-adm")} className='text-white' startContent={
 
-                        <ChartPieSlice size={25} weight="duotone" />
-                      }>
-                        Dashboard
-                      </DropdownItem>
-                    }
+                      <ChartPieSlice size={25} weight="duotone" />
+                    }>
+                      Dashboard
+                    </DropdownItem>
+                  }
+
+                  <DropdownItem onClick={() => redefinirSenha()} className='text-white' startContent={
+
+                    <PencilSimple size={25} weight="duotone" />
+                  }>
+                    Redefinir Senha
+                  </DropdownItem>
 
                   <DropdownItem onClick={() => fecharSessao()} color='danger' className='text-white' startContent={
                     <SignOut size={25} weight="duotone" />
