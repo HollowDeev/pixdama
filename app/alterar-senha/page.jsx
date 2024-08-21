@@ -101,7 +101,7 @@ function recuperarSenha() {
             await supabase
                 .from('dados_usuarios')
                 .update({ alterando_senha: Boolean(true) })
-                .eq('id_usuario', id)
+                .eq('id_usuario', idUsuario)
                 
             if (error && error.code == 'same_password') {
                 alert('A nova senha não pode ser similar a anterior')
