@@ -67,8 +67,8 @@ function Header() {
 
   }
 
-  const redefinirSenha = () => {
-    const error = alterarSenha(dadosUsuarios.email, dadosUsuarios.id)
+  const redefinirSenha = async () => {
+    const error = await alterarSenha(dadosUsuarios.email, dadosUsuarios.id)
     if(error){
       alert(error)
     }else {

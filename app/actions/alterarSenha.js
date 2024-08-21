@@ -9,7 +9,7 @@ async function alterarSenha(email, id) {
 
   const { error } = await supabase
     .from('dados_usuarios')
-    .update({ id: true })
+    .update({ alterando_senha: Boolean(true) })
     .eq('id_usuario', id)
     .select()
 

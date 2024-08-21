@@ -30,28 +30,28 @@ function recuperarSenha() {
     useEffect(() => {
 
         const verificar = async () => {
-          const dados = await verificarSessao()
-            
-          if(dados.alterandoSenha){
-            definirDadosUsuarios(dados)
-            definirUsuarioAutenticado(dados.usuarioAutenticado)
-          }else {
-            route.push('/')
-          }
-          
+            const dados = await verificarSessao()
+
+            if (dados.alterandoSenha) {
+                definirDadosUsuarios(dados)
+                definirUsuarioAutenticado(dados.usuarioAutenticado)
+            } else {
+                route.push('/')
+            }
+
         }
-    
+
         supabase.auth.onAuthStateChange((event) => {
-          if (event == "SIGNED_IN") {
-            verificar()
-          } else if (event == "SIGNED_OUT") {
-            definirUsuarioAutenticado(false)
-          }
+            if (event == "SIGNED_IN") {
+                verificar()
+            } else if (event == "SIGNED_OUT") {
+                definirUsuarioAutenticado(false)
+            }
         })
-    
+
         verificar()
-    
-      }, [])
+
+    }, [])
 
     useEffect(() => {
         const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -72,7 +72,7 @@ function recuperarSenha() {
                 mensagemErro: ""
             })
 
-            
+
         }
 
 
@@ -99,17 +99,17 @@ function recuperarSenha() {
             })
 
             await supabase
-            .from('dados_usuarios')
-            .update({ id: false })
-            .eq('id_usuario', idUsuario)
-            
-            if(error && error.code == 'same_password') {
+                .from('dados_usuarios')
+                .update({ alterando_senha: Boolean(true) })
+                .eq('id_usuario', id)
+                
+            if (error && error.code == 'same_password') {
                 alert('A nova senha não pode ser similar a anterior')
                 definirErroDeSenha({
                     erro: true,
                     mensagemErro: 'A nova senha não pode similar a anterior'
                 })
-            }else {
+            } else {
                 definirErroDeSenha({
                     erro: false,
                     mensagemErro: ''
