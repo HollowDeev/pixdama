@@ -12,6 +12,7 @@ import Link from 'next/link'
 import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
 import alterarSenha from '../actions/alterarSenha'
+import { verificarSessao } from '../actions/verificarSessao'
 
 function Header() {
 
@@ -24,7 +25,6 @@ function Header() {
   const [tipoModal, definirTipoModal] = useState()
 
   const abrirModal = (tipo) => {
-
     definirTipoModal(tipo)
     onOpen()
   }
@@ -35,49 +35,25 @@ function Header() {
 
   useEffect(() => {
 
+    const verificar = async () => {
+      const dados = await verificarSessao()
+
+      definirDadosUsuarios(dados)
+      definirUsuarioAutenticado(dados.usuarioAutenticado)
+    }
+
     supabase.auth.onAuthStateChange((event) => {
       if (event == "SIGNED_IN") {
-        definirUsuarioAutenticado(true)
+        verificar()
       } else if (event == "SIGNED_OUT") {
         definirUsuarioAutenticado(false)
       }
     })
 
-    const verificarSessao = async () => {
-      const { data, error } = await supabase.auth.getUser()
-      let emailUsuario = data.user.email
+    verificar()
 
-
-      if (error || !data) {
-        definirUsuarioAutenticado(false)
-      } else {
-        let { data: dados_usuarios, error } = await supabase
-          .from('dados_usuarios')
-          .select("*")
-          .eq('id_usuario', data.user.id)
-
-        if (error) {
-          console.error(error)
-        } else {
-          if (dados_usuarios[0].nivel_usuario != 2) {
-            definirUsuarioAutenticado(false)
-          } else {
-            definirUsuarioAutenticado(true)
-            definirDadosUsuarios({
-              email: emailUsuario,
-              administrador: dados_usuarios[0].nivel_usuario == 2 ? true : false
-            })
-          }
-
-        }
-
-
-      }
-    }
-
-
-    verificarSessao()
   }, [])
+
 
   const fecharSessao = async () => {
     const { error } = await supabase.auth.signOut()

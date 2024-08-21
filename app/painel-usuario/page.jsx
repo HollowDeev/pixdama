@@ -7,6 +7,7 @@ import { Fire, Trophy } from '@phosphor-icons/react'
 import { useRouter } from 'next/navigation'
 
 import React, { useEffect, useState } from 'react'
+import { verificarSessao } from '../actions/verificarSessao'
 
 function painelUsuario() {
     const [usuarioAutenticado, definirUsuarioAutenticado] = useState(false)
@@ -17,55 +18,30 @@ function painelUsuario() {
 
     useEffect(() => {
 
-        supabase.auth.onAuthStateChange((event) => {
-            if (event == "SIGNED_IN") {
-                definirUsuarioAutenticado(true)
-            } else if (event == "SIGNED_OUT") {
+        const verificar = async () => {
+            const dados = await verificarSessao()
+
+            if(dados.usuarioAutenticado){
+                definirDadosUsuarios(dados)
+            definirUsuarioAutenticado(dados.usuarioAutenticado)
+            }else{
                 route.push('/')
-            }
-        })
-       
-        const verificarSessao = async () => {
-            const { data, error } = await supabase.auth.getUser()
-
-            const formatarNomeUsuario = (nomeCompleto) => {
-                const nomes = nomeCompleto.trim().split(" ");
-
-                let primeiroNome = nomes[0];
-
-                primeiroNome = primeiroNome.charAt(0).toUpperCase() + primeiroNome.slice(1).toLowerCase();
-
-                return primeiroNome;
-            }
-
-            if (error || !data) {
-                definirUsuarioAutenticado(false)
-                route.push('/')
-            } else {
-                definirUsuarioAutenticado(true)
-                let { data: dados_usuarios, error } = await supabase
-                    .from('dados_usuarios')
-                    .select("*")
-                    .eq('id_usuario', data.user.id)
-
-                if (error) {
-                    console.log(error)
-                } else (
-                    definirDadosUsuarios({
-                        nome: formatarNomeUsuario(dados_usuarios[0].nome),
-                        totalVitorias: dados_usuarios[0].numero_vitorias,
-                        vitoriasEmSequencia: dados_usuarios[0].vitorias_sequencia
-                    })
-                )
-
-
             }
         }
 
-        verificarSessao()
+        supabase.auth.onAuthStateChange((event) => {
+            if (event == "SIGNED_IN") {
+                verificar()
+            } else if (event == "SIGNED_OUT") {
+                definirUsuarioAutenticado(false)
+            }
+        })
+
+        verificar()
+
     }, [])
 
-    
+
     return (
         <main className='flex min-h-screen flex-col items-center px-2 py-9 md:px-16 gap-10 text-white'>
             {usuarioAutenticado && (

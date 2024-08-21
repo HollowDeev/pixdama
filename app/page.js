@@ -7,6 +7,7 @@ import { createClient } from "@/utils/supabase/client";
 import { Button } from "@nextui-org/button";
 import { Trophy } from "@phosphor-icons/react";
 import { Accordion, AccordionItem } from "@nextui-org/react";
+import { verificarSessao } from "./actions/verificarSessao";
 
 export default function Home() {
 
@@ -19,42 +20,23 @@ export default function Home() {
 
   useEffect(() => {
 
-    const verificarSessao = async () => {
-      const { data, error } = await supabase.auth.getUser()
+    const verificar = async () => {
+      const dados = await verificarSessao()
 
-      if (error || !data) {
-        definirUsuarioAutenticado(false)
-      } else {
-        definirUsuarioAutenticado(true)
-        let { data: dados_usuarios, error } = await supabase
-          .from('dados_usuarios')
-          .select("*")
-          .eq('id_usuario', data.user.id)
-
-        if (error) {
-          console.error(error)
-        } else if(dados_usuarios){
-          definirDadosUsuarios({
-            totalVitorias: dados_usuarios[0].numero_vitorias,
-          })
-        }
-
-
-      }
+      definirDadosUsuarios(dados)
+      definirUsuarioAutenticado(dados.usuarioAutenticado)
     }
 
     supabase.auth.onAuthStateChange((event) => {
       if (event == "SIGNED_IN") {
-        definirUsuarioAutenticado(true)
-        verificarSessao()
+        verificar()
       } else if (event == "SIGNED_OUT") {
         definirUsuarioAutenticado(false)
       }
     })
 
+    verificar()
 
-
-    verificarSessao()
   }, [])
 
 

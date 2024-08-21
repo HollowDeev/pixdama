@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react'
 import alterarSenha from '../actions/alterarSenha'
 import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
+import { verificarSessao } from '../actions/verificarSessao'
 
 function painelAdm() {
 
@@ -32,64 +33,35 @@ function painelAdm() {
 
     useEffect(() => {
 
-        supabase.auth.onAuthStateChange((event) => {
-            if (event == "SIGNED_IN") {
-                definirUsuarioAutenticado(true)
-            } else if (event == "SIGNED_OUT") {
+        const verificar = async () => {
+          const dados = await verificarSessao()
+            
+            if(dados.administrador){
+                definirDadosUsuarios(dados)
+                definirUsuarioAutenticado(dados.usuarioAutenticado)
+            }else {
                 route.push('/')
             }
-        })
-
-        const verificarSessao = async () => {
-            const { data, error } = await supabase.auth.getUser()
-            let emailUsuario = data.user.email
-
-            const formatarNomeUsuario = (nomeCompleto) => {
-                const nomes = nomeCompleto.trim().split(" ");
-
-                let primeiroNome = nomes[0];
-
-                primeiroNome = primeiroNome.charAt(0).toUpperCase() + primeiroNome.slice(1).toLowerCase();
-
-                return primeiroNome;
-            }
-
-            if (error || !data) {
-                definirUsuarioAutenticado(false)
-                route.push('/')
-            } else {
-                let { data: dados_usuarios, error } = await supabase
-                    .from('dados_usuarios')
-                    .select("*")
-                    .eq('id_usuario', data.user.id)
-
-                if (error) {
-                    console.error(error)
-                } else {
-                    if (dados_usuarios[0].nivel_usuario != 2) {
-                        definirUsuarioAutenticado(false)
-                        route.push('/')
-                    } else {
-                        definirUsuarioAutenticado(true)
-                        definirDadosUsuarios({
-                            nome: formatarNomeUsuario(dados_usuarios[0].nome),
-                            email: emailUsuario
-                        })
-                    }
-
-                }
-
-
-            }
+          
         }
-
-        verificarSessao()
+    
+        supabase.auth.onAuthStateChange((event) => {
+          if (event == "SIGNED_IN") {
+            verificar()
+          } else if (event == "SIGNED_OUT") {
+            definirUsuarioAutenticado(false)
+          }
+        })
+    
+        verificar()
+    
     }, [])
+
 
     const redefinirSenha = () => {
         alterarSenha(dadosUsuarios.email)
         alert('Um link para redefinição da sua senha foi enviado para o seu email!')
-      }
+    }
 
     return (
         <main className='flex min-h-screen flex-col items-center px-2 py-9 md:px-16 gap-5 text-white'>
@@ -103,7 +75,7 @@ function painelAdm() {
                             </DropdownTrigger>
                             <DropdownMenu>
                                 <DropdownItem onClick={() => redefinirSenha()} className='text-white' startContent={
-                                    <PencilSimple size={25} weight="duotone"/>
+                                    <PencilSimple size={25} weight="duotone" />
                                 }>
                                     Alterar Senha
                                 </DropdownItem>
