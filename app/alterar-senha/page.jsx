@@ -6,6 +6,7 @@ import { Input } from "@nextui-org/input"
 import { Eye, EyeClosed } from "@phosphor-icons/react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
+import { verificarSessao } from "../actions/verificarSessao"
 
 function recuperarSenha() {
 
@@ -98,11 +99,13 @@ function recuperarSenha() {
                 password: senha
             })
 
-            await supabase
+            const { error2 } = await supabase
                 .from('dados_usuarios')
-                .update({ alterando_senha: true})
+                .update({ alterando_senha: false })
+
                 .eq('id_usuario', idUsuario)
-                
+                .select()
+
             if (error && error.code == 'same_password') {
                 alert('A nova senha não pode ser similar a anterior')
                 definirErroDeSenha({
@@ -121,50 +124,54 @@ function recuperarSenha() {
 
     return (
         <main className='flex min-h-screen flex-col items-center px-2 py-9 md:px-16 gap-5 text-white'>
-            <h1 className="font-bold text-3xl">Recuperação de Senha</h1>
+            {usuarioAutenticado && (
+                <>
+                    <h1 className="font-bold text-3xl">Recuperação de Senha</h1>
 
-            <div className="flex flex-col gap-4">
-                <Input className="dark text-white" variant="bordered" label="Senha" type={senhaVisivel ? "text" : "password"} placeholder={senhaVisivel ? "sua senha" : "*******"} isRequired onValueChange={definirSenha} value={senha} isInvalid={erroDeSenha.erro} errorMessage={erroDeSenha.mensagemErro}
-                    endContent={
-                        <button onClick={() => definirSenhaVisivel(!senhaVisivel)}>
-                            {senhaVisivel ?
-                                <Eye size={20} weight="bold" />
-                                :
-                                <EyeClosed size={20} weight="bold" />
+                    <div className="flex flex-col gap-4">
+                        <Input className="dark text-white" variant="bordered" label="Senha" type={senhaVisivel ? "text" : "password"} placeholder={senhaVisivel ? "sua senha" : "*******"} isRequired onValueChange={definirSenha} value={senha} isInvalid={erroDeSenha.erro} errorMessage={erroDeSenha.mensagemErro}
+                            endContent={
+                                <button onClick={() => definirSenhaVisivel(!senhaVisivel)}>
+                                    {senhaVisivel ?
+                                        <Eye size={20} weight="bold" />
+                                        :
+                                        <EyeClosed size={20} weight="bold" />
+                                    }
+                                </button>
                             }
-                        </button>
-                    }
 
-                />
+                        />
 
 
-                <Input className="dark text-white" variant="bordered" label="Confirme sua Senha" type={confirmarSenhaVisivel ? "text" : "password"} placeholder={confirmarSenhaVisivel ? "sua senha" : "*******"} isRequired value={confirmarSenha} onValueChange={definirConfirmarSenha}
-                    endContent={
-                        <button onClick={() => definirConfirmarSenhaVisivel(!confirmarSenhaVisivel)}>
-                            {confirmarSenhaVisivel ?
-                                <Eye size={20} weight="bold" />
-                                :
-                                <EyeClosed size={20} weight="bold" />
+                        <Input className="dark text-white" variant="bordered" label="Confirme sua Senha" type={confirmarSenhaVisivel ? "text" : "password"} placeholder={confirmarSenhaVisivel ? "sua senha" : "*******"} isRequired value={confirmarSenha} onValueChange={definirConfirmarSenha}
+                            endContent={
+                                <button onClick={() => definirConfirmarSenhaVisivel(!confirmarSenhaVisivel)}>
+                                    {confirmarSenhaVisivel ?
+                                        <Eye size={20} weight="bold" />
+                                        :
+                                        <EyeClosed size={20} weight="bold" />
+                                    }
+                                </button>
                             }
-                        </button>
-                    }
 
-                />
+                        />
 
-                <div >
-                    <p className='text-neutral-500 text-sm'>Sua senha deve conter:</p>
-                    <ul className='text-neutral-500 text-[10px]'>
-                        <li>* Minimo de 8 Caracteres</li>
-                        <li>* Minimo de 1 Caracter Maisculo</li>
-                        <li>* Minimo de 1 Caracter Numerico</li>
-                        <li>* Minimo de 1 Caracter Especial</li>
-                    </ul>
-                </div>
+                        <div >
+                            <p className='text-neutral-500 text-sm'>Sua senha deve conter:</p>
+                            <ul className='text-neutral-500 text-[10px]'>
+                                <li>* Minimo de 8 Caracteres</li>
+                                <li>* Minimo de 1 Caracter Maisculo</li>
+                                <li>* Minimo de 1 Caracter Numerico</li>
+                                <li>* Minimo de 1 Caracter Especial</li>
+                            </ul>
+                        </div>
 
-                <Button onPress={redefinir}>
-                    Redefinir Senha
-                </Button>
-            </div>
+                        <Button onPress={redefinir}>
+                            Redefinir Senha
+                        </Button>
+                    </div>
+                </>
+            )}
         </main>
     )
 }

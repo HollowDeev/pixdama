@@ -26,12 +26,13 @@ export const verificarSessao = async () => {
 
     const { data, error } = await supabase.auth.getUser()
 
-    const idUsuario = data.user.id
+    
     let usuarioAdministrador = false
 
     if (!error || data.user != null) {
         let emailUsuario = data.user.email
-
+        const idUsuario = data.user.id
+        
         let { data: dados_usuarios, error } = await supabase
             .from('dados_usuarios')
             .select("*")
