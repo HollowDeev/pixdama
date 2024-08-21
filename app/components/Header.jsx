@@ -68,8 +68,12 @@ function Header() {
   }
 
   const redefinirSenha = () => {
-    alterarSenha(dadosUsuarios.email)
-    alert('Um link para redefinição da sua senha foi enviado para o seu email!')
+    const error = alterarSenha(dadosUsuarios.email, dadosUsuarios.id)
+    if(error){
+      alert(error)
+    }else {
+      alert('Um link para redefinição da sua senha foi enviado para o seu email!')
+    }
   }
 
   return (

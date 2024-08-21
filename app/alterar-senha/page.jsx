@@ -16,6 +16,7 @@ function recuperarSenha() {
     const [confirmarSenha, definirConfirmarSenha] = useState('')
 
     const [usuarioAutenticado, definirUsuarioAutenticado] = useState(false)
+    const [dadosUsuarios, definirDadosUsuarios] = useState({})
 
     // Gerenciadores da visibilidade da senha
     const [senhaVisivel, definirSenhaVisivel] = useState(false)
@@ -28,29 +29,29 @@ function recuperarSenha() {
 
     useEffect(() => {
 
-        supabase.auth.onAuthStateChange((event) => {
-            if (event == "SIGNED_IN") {
-                definirUsuarioAutenticado(true)
-            } else if (event == "SIGNED_OUT") {
-                route.push('/')
-            }
-        })
-
-        const verificarSessao = async () => {
-            const { data, error } = await supabase.auth.getUser()
-
-            if (error || !data) {
-                definirUsuarioAutenticado(false)
-                console.error(error)
-                route.push('/')
-            } else {
-                definirUsuarioAutenticado(true)
-
-            }
+        const verificar = async () => {
+          const dados = await verificarSessao()
+            
+          if(dados.alterandoSenha){
+            definirDadosUsuarios(dados)
+            definirUsuarioAutenticado(dados.usuarioAutenticado)
+          }else {
+            route.push('/')
+          }
+          
         }
-
-        verificarSessao()
-    }, [])
+    
+        supabase.auth.onAuthStateChange((event) => {
+          if (event == "SIGNED_IN") {
+            verificar()
+          } else if (event == "SIGNED_OUT") {
+            definirUsuarioAutenticado(false)
+          }
+        })
+    
+        verificar()
+    
+      }, [])
 
     useEffect(() => {
         const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -96,6 +97,11 @@ function recuperarSenha() {
                 id: idUsuario,
                 password: senha
             })
+
+            await supabase
+            .from('dados_usuarios')
+            .update({ id: false })
+            .eq('id_usuario', idUsuario)
             
             if(error && error.code == 'same_password') {
                 alert('A nova senha não pode ser similar a anterior')

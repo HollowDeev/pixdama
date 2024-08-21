@@ -5,11 +5,13 @@ export const verificarSessao = async () => {
     const supabase = createClient()
 
     let dadosUsuarios = {
+        id: '',
         nome: '',
         email: '',
         administrador: false,
         totalVitorias: 0,
-        usuarioAutenticado: false
+        usuarioAutenticado: false,
+        alterandoSenha: false
     }
 
     const formatarNomeUsuario = (nomeCompleto) => {
@@ -24,6 +26,7 @@ export const verificarSessao = async () => {
 
     const { data, error } = await supabase.auth.getUser()
 
+    const idUsuario = data.user.id
     let usuarioAdministrador = false
 
     if (!error || data.user != null) {
@@ -41,11 +44,13 @@ export const verificarSessao = async () => {
             }
 
             dadosUsuarios = {
+                id: idUsuario,
                 nome: formatarNomeUsuario(dados_usuarios[0].nome),
                 email: emailUsuario,
                 administrador: usuarioAdministrador,
                 totalVitorias: dados_usuarios[0].numero_vitorias,
-                usuarioAutenticado: true
+                usuarioAutenticado: true,
+                alterandoSenha: dados_usuarios[0].alterando_senha
             }
         } 
 
