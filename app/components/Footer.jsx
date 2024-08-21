@@ -3,7 +3,7 @@ import React from 'react'
 
 function Footer() {
     return (
-        <div className='lg:h-28  w-full bg-gray-700 text-white text-center flex  flex-col items-center justify-center gap-5 md:mb-0 py-8 px-4'>
+        <div className='lg:h-28 mb-16 w-full bg-gray-700 text-white text-center flex  flex-col items-center justify-center gap-5 md:mb-0 py-8 px-4'>
             <div className='flex gap-5'>
                 <Link href="/" className='cursor-pointer'>
                     <p className='text-md text-white '>PIX <span className='font-black text-gray-300'>Dama</span> </p>
