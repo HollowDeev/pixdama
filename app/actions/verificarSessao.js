@@ -1,4 +1,5 @@
-import { createClient } from "@/utils/supabase/client"
+import { createClient } from "@/utils/supabase/server.js";
+
 
 export const verificarSessao = async () => {
 
@@ -10,6 +11,7 @@ export const verificarSessao = async () => {
         email: '',
         administrador: false,
         totalVitorias: 0,
+        vitoriasEmSequencia: 0,
         usuarioAutenticado: false,
         alterandoSenha: false
     }
@@ -26,20 +28,20 @@ export const verificarSessao = async () => {
 
     const { data, error } = await supabase.auth.getUser()
 
-    
+
     let usuarioAdministrador = false
 
     if (!error || data.user != null) {
         let emailUsuario = data.user.email
         const idUsuario = data.user.id
-        
+
         let { data: dados_usuarios, error } = await supabase
             .from('dados_usuarios')
             .select("*")
             .eq('id_usuario', data.user.id)
 
         if (!error) {
-            
+
             if (dados_usuarios[0].nivel_usuario == 2) {
                 usuarioAdministrador = true
             }
@@ -50,15 +52,20 @@ export const verificarSessao = async () => {
                 email: emailUsuario,
                 administrador: usuarioAdministrador,
                 totalVitorias: dados_usuarios[0].numero_vitorias,
+                vitoriasEmSequencia: dados_usuarios[0].vitorias_sequencia,
                 usuarioAutenticado: true,
                 alterandoSenha: dados_usuarios[0].alterando_senha
             }
-        } 
+        } else {
+            console.log(error)
+        }
 
-        console.error(error)
+
+    } else {
+
+        console.log(error)
     }
 
-    console.error(error)
 
     return dadosUsuarios
 }

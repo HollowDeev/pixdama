@@ -6,7 +6,7 @@ import { Input } from "@nextui-org/input"
 import { Eye, EyeClosed } from "@phosphor-icons/react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-import { verificarSessao } from "../actions/verificarSessao"
+import { verificarSessao } from "../../actions/verificarSessao"
 
 function recuperarSenha() {
 

@@ -1,7 +1,7 @@
 
 
 import { Inter } from "next/font/google";
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, NextUIProvider, useDisclosure } from "@nextui-org/react"
+import {NextUIProvider} from "@nextui-org/react"
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
