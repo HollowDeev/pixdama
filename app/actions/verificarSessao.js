@@ -1,7 +1,9 @@
+'use server'
+
 import { createClient } from "../utils/supabase/server"
 
 
-export const verificarSessao = async () => {
+export async function verificarSessao() {
 
     const supabase = createClient()
 

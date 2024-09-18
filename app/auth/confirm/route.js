@@ -1,4 +1,4 @@
-
+'use server'
 
 import { createClient } from '@/app/utils/supabase/server' 
 import { redirect } from 'next/navigation'

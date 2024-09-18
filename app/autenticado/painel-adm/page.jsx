@@ -1,3 +1,4 @@
+'use server'
 
 import { CrownSimple, Users, Wallet } from '@phosphor-icons/react/dist/ssr'
 import { verificarSessao } from '../../actions/verificarSessao'
