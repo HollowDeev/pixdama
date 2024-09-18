@@ -1,6 +1,6 @@
 'use client'
 
-import { createClient } from "@/utils/supabase/client"
+import { createClient } from "../utils/supabase/client" 
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/dropdown"
 import { ChartPieSlice, PencilSimple, SignOut, UserCircle, Wallet } from "@phosphor-icons/react/dist/ssr"
 import { useRouter } from "next/navigation"

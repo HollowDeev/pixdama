@@ -1,7 +1,7 @@
 
 import { CrownSimple, Users, Wallet } from '@phosphor-icons/react/dist/ssr'
 import { verificarSessao } from '../../actions/verificarSessao'
-import { createClient } from '@/utils/supabase/server'
+import { createClient } from '@/app/utils/supabase/server' 
 
 async function painelAdm() {
 

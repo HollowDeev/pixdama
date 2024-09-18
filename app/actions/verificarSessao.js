@@ -1,4 +1,4 @@
-import { createClient } from "@/utils/supabase/server.js";
+import { createClient } from "../utils/supabase/server"
 
 
 export const verificarSessao = async () => {
