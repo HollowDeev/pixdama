@@ -1,19 +1,11 @@
 'use client'
 
-import { createClient } from "../utils/supabase/client" 
+import { createClient } from "../utils/supabase/client"
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/dropdown"
 import { ChartPieSlice, PencilSimple, SignOut, UserCircle, Wallet } from "@phosphor-icons/react/dist/ssr"
-import { useRouter } from "next/navigation"
 
 function MenuUsuario({ dadosUsuario }) {
-    const route = useRouter()
-
     const supabase = createClient()
-
-    async function signOut() {
-        await supabase.auth.signOut()
-        route.push('/')
-    }
 
     const alterarSenha = async () => {
         const { error } = await supabase
@@ -22,7 +14,7 @@ function MenuUsuario({ dadosUsuario }) {
             .eq('id_usuario', dadosUsuario.id)
             .select()
 
-        if (!error){
+        if (!error) {
             await supabase.auth.resetPasswordForEmail(dadosUsuario.email, {
                 redirectTo: process.env.NEXT_PUBLIC_URL_ALTERACAO_SENHA,
             })
@@ -56,10 +48,10 @@ function MenuUsuario({ dadosUsuario }) {
                         Redefinir Senha
                     </DropdownItem>
 
-                    <DropdownItem onPress={signOut} color='danger' className='text-white' startContent={
+                    <DropdownItem color='danger' className='text-white' startContent={
                         <SignOut size={25} weight="duotone" />
                     }>
-                        Sair
+                        <a href="/auth/sair"> Sair</a>
                     </DropdownItem>
                 </DropdownMenu>
             </Dropdown>
