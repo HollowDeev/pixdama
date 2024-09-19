@@ -32,7 +32,7 @@ export default async function Header() {
           }
         </div>
         <div className='md:hidden'>
-          <MenuUsuario administrador={dados.administrador} autenticado={dados.usuarioAutenticado} />
+          <MenuUsuario dadosUsuario={dados} />
         </div>
       </div>
 
