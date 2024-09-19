@@ -51,7 +51,8 @@ export async function updateSession(request) {
   }
 
   if (user && request.nextUrl.pathname.startsWith('/auth/cadastro') || 
-    user && request.nextUrl.pathname.startsWith('/auth/login')
+    user && request.nextUrl.pathname.startsWith('/auth/login') ||
+    user && request.nextUrl.pathname.startsWith('/auth/aviso')
   ) {
     url.pathname = '/'
     return NextResponse.redirect(url)

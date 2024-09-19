@@ -83,7 +83,7 @@ export async function signup(formData) {
 
       } else {
         revalidatePath('/', 'layout')
-        redirect('/')
+        redirect('/auth/aviso')
       }
     }
 
@@ -93,3 +93,4 @@ export async function signup(formData) {
 
 
 }
+
