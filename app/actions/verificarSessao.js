@@ -40,7 +40,7 @@ export const verificarSessao = async () => {
 
         if (!error) {
             
-            if (dados_usuarios[0].nivel_usuario == 2) {
+            if (dados_usuarios[0].nivel_usuario && dados_usuarios[0].nivel_usuario == 2) {
                 usuarioAdministrador = true
             }
 

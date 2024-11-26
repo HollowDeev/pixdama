@@ -44,7 +44,7 @@ export async function cadastro(nome, email, senha, CPF, dataFormatada, confirmaO
 
       const { error } = await supabase
         .from('dados_usuarios')
-        .insert([{ id_usuario: userId, nome: nome, data_nascimento: dataFormatada, CPF: CPF_Formatado, aceitou_termos: confirmaOsTermos, confirmou_idade: confirmaSerMaiorDeIdade, confirmou_dados: confirmaPreencherCorretamente }])
+        .insert([{ id_usuario: userId, nome: nome, email: email, data_nascimento: dataFormatada, CPF: CPF_Formatado, aceitou_termos: confirmaOsTermos, confirmou_idade: confirmaSerMaiorDeIdade, confirmou_dados: confirmaPreencherCorretamente }])
 
       if (error) {
         sucessoCadastro = false
